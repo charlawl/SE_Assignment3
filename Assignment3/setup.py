@@ -7,11 +7,10 @@ setup(name="lightbox",
       author="Charlotte Hearne",
       author_email="charlotte.hearne@ucdconnect.ie",
       licence="GPL3",
-      packages=['src'],
+      packages=['light_box'],
+      test_suite="tests",
       entry_points={
-        'console_scripts':['light_box=light_box.main:main']
+        'console_scripts': ['light_box=light_box.main:main']
         },
-      install_requires=[
-          'numpy',
-      ],
+
       )
