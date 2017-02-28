@@ -2,9 +2,6 @@ import urllib.request
 import matplotlib.pyplot as plt
 import argparse
 
-#uri = "http://claritytrec.ucd.ie/~alawlor/comp30670/input_assign3.txt"
-#uri = 'http://claritytrec.ucd.ie/~alawlor/comp30670/input_assign3_c.txt'
-#uri = 'http://claritytrec.ucd.ie/~alawlor/comp30670/input_assign3_a.txt'
 #uri = 'input_assign3.txt'
 
 
@@ -12,12 +9,10 @@ def read_uri(fname):
     """Opening file or url depending on the prefix of the input. The file is then split on new lines"""
     if fname.startswith('http'):
         open_file = urllib.request.urlopen(fname)
-        return open_file.read().decode('Utf-8').split('\n')
+        return open_file.read().decode('Utf-8').split('\n') # utf decoding only needed for reading from url
     else:
         open_file = open(fname)
         return open_file.read().split('\n')
-
-#add in .decode('utf-8')
 
 class LightBox():
     """Class which handles all lightbox functionality."""
@@ -33,6 +28,7 @@ class LightBox():
 
 
 def parse_line(line):
+    """Parsing lines from file. Switch/on/off co-ordinates taken from specific line indices """
     line = line.split()
     if 'switch' in line:
         start = (line[1])
@@ -52,20 +48,24 @@ def parse_line(line):
 
 
 def on(light):
+    """Fucntion to handle turning lights on"""
     return True
 
 
 def off(light):
+    """Function to handle turning lights off"""
     return False
 
 
 def switch(light):
+    """Function to handle switching light state"""
     return not light
 
 
 def main():
+    """Main function called"""
 
-    buffer = read_uri(uri)
+    buffer = read_uri(uri)  # buffer will take arguments from arg parse in the command line
     lightbox = LightBox(size=int(buffer[0]))
 
     for line in buffer[1::]:
