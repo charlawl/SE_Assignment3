@@ -1,6 +1,5 @@
 import urllib.request
 import re
-import matplotlib.pyplot as plt
 import argparse
 
 def read_uri(fname):
@@ -101,15 +100,7 @@ def main():
             if result:
                 start, end, fun = result
                 lightbox.light_change(start, end, fun)
-            else:
-                print(line)
-
-
     print(lightbox.count_lights())
-
-    # Heatmap to show distribution of lights that are on (uncomment for heatmap)
-    #plt.pcolor(lightbox.light)
-    #plt.show()
 
 
 if __name__ == '__main__':
