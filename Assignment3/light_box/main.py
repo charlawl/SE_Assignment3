@@ -25,6 +25,20 @@ class LightBox():
         """Creates the LED array the size of which depends on the first line of the file."""
         return [[False for _ in range(self.light_size)] for _ in range(self.light_size)]
 
+    def get_coords(self, str_tuple):
+        """Checks if co-ordinates are out of range. Negative values are set to zero, values above the max
+        are set to the max value"""
+        return tuple(min(max(0, int(i)), self.light_size - 1) for i in str_tuple.split(','))
+
+
+    def light_change(self, start, end, instruction):
+        """Takes start, end and instruction parameters, and changes light accordingly"""
+        start = self.get_coords(start)
+        end = self.get_coords(end)
+        for j in range(start[1], end[1] + 1):
+            for i in range(start[0], end[0] + 1):
+                self.light[i][j] = instruction(self.light[i][j])
+
 
 
 def parse_line(line):
