@@ -1,4 +1,4 @@
-from light_box import parse_line, switch, on, off, read_uri, LightBox
+from light_box import parse_line, switch, on, off, read_uri, LightBox, test_lights
 import unittest
 
 
@@ -8,11 +8,13 @@ class TestLights(unittest.TestCase):
     def setUp(self):
         self.light_box = LightBox(3)
         self.test_buffer = ['3', 'switch 0,1 through 2,2']
-        self.test_file = "tests/input_assign3_b_v2.txt"
+        self.test_file = "input_assign3.txt"
 
     def test_read_file(self):
         read_uri(self.test_file)
 
+    def test_main(self):
+        test_lights(self.test_file)
 
     def test_light_change(self):
         new_light = [[True, True, True],[False, False, False],[False, False, False]]

@@ -12,5 +12,5 @@ setup(name="lightbox",
       entry_points={
         'console_scripts': ['light_box=light_box.main:main']
         },
-
+      requires = ['requests']
       )

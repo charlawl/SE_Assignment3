@@ -1,12 +1,13 @@
 import urllib.request
 import re
 import argparse
+import requests
 
 def read_uri(fname):
     """Opening file or url depending on the prefix of the input. The file is then split on new lines"""
     if fname.startswith('http'):
-        open_file = urllib.request.urlopen(fname)
-        return open_file.read().decode('Utf-8').split('\n') # utf decoding only needed for reading from url
+        r = requests.get(fname)
+        return r.iter_lines(decode_unicode=True) # utf decoding only needed for reading from url
     else:
         open_file = open(fname)
         return open_file
@@ -91,17 +92,21 @@ def main():
         print("No arguments provided. Please use -h for help.")
         return 1
 
-    buffer = read_uri(uri)  # buffer will take arguments from arg parse in the command line
-    lightbox = LightBox(size=int(buffer[0]))
+    test_lights(uri)
 
-    for line in buffer[1::]:
+
+def test_lights(uri):
+
+    buffer = read_uri(uri)  # buffer will take arguments from arg parse in the command line
+    lightbox = LightBox(size=int(next(buffer)))
+
+    for line in buffer:
         if line:
             result = parse_line(line)
             if result:
                 start, end, fun = result
                 lightbox.light_change(start, end, fun)
+
     print(lightbox.count_lights())
 
-
-if __name__ == '__main__':
-    main()
+test_lights(uri)
