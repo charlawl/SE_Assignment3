@@ -2,7 +2,7 @@ import urllib.request
 import matplotlib.pyplot as plt
 import argparse
 
-#uri = 'input_assign3.txt'
+uri = 'input_assign3.txt'
 
 
 def read_uri(fname):
@@ -32,12 +32,19 @@ class LightBox():
 
 
     def light_change(self, start, end, instruction):
-        """Takes start, end and instruction parameters, and changes light accordingly"""
+        """Takes start, end and instruction parameters, and changes light accordingly. Loops through y and then x"""
         start = self.get_coords(start)
         end = self.get_coords(end)
         for j in range(start[1], end[1] + 1):
             for i in range(start[0], end[0] + 1):
                 self.light[i][j] = instruction(self.light[i][j])
+
+    def count_lights(self):
+        """Sums the number of True (1) on each line of the array and provides the result in lights_on"""
+        lights_on = 0
+        for line in self.light:
+            lights_on += sum(line)
+        return lights_on
 
 
 
@@ -79,6 +86,17 @@ def switch(light):
 def main():
     """Main function called"""
 
+    parser = argparse.ArgumentParser(prog='light_box')
+    parser.add_argument('-f', nargs='?', help='filename')
+    parser.add_argument('-u', nargs='?', help='URL')
+
+    args = parser.parse_args()
+
+    uri = args.f or args.u
+    if not uri:
+        print("No arguments provided. Please use -h for help.")
+        return 1
+
     buffer = read_uri(uri)  # buffer will take arguments from arg parse in the command line
     lightbox = LightBox(size=int(buffer[0]))
 
@@ -86,11 +104,13 @@ def main():
         if line:
             start, end, fun = parse_line(line)
             lightbox.light_change(start, end, fun)
-            # Heatmap to show distribution of lights that are on (uncomment for heatmap)
-        #plt.pcolor(lightbox.light)
-        #plt.show()
 
     print(lightbox.count_lights())
+
+    # Heatmap to show distribution of lights that are on (uncomment for heatmap)
+    #plt.pcolor(lightbox.light)
+    #plt.show()
+
 
 if __name__ == '__main__':
     main()
