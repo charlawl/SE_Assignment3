@@ -1,0 +1,21 @@
+10000
+turn off 106,1489 through 5477,9324
+switch 7953,6194 through 9792,8315
+turn off 5717,1555 through 7077,4113
+turn off 9647,9489 through 9907,9542
+turn on 1181,456 through 4003,2678
+turn off 1870,1374 through 8093,8179
+turn on 5884,9494 through 9052,9688
+turn on 9239,4912 through 9419,5481
+switch 6868,5652 through 8683,8443
+turn off 5815,3337 through 9906,5422
+switch 3943,7381 through 9993,9018
+switch 3793,9472 through 7521,9677
+switch 7027,4374 through 7033,7212
+switch 3660,4780 through 5107,7607
+turn off 8898,2725 through 8950,4228
+turn off 3229,7606 through 5095,8391
+turn on 1161,2824 through 6019,8898
+turn on 9303,6790 through 9901,9909
+switch 4257,8830 through 9345,8835
+switch 7920,6749 through 9043,9917

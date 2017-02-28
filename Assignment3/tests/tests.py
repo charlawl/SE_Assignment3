@@ -1,4 +1,4 @@
-from light_box import parse_line, switch, on, off, LightBox, read_uri
+from light_box import parse_line, switch, on, off, read_uri, LightBox
 import unittest
 
 
@@ -8,7 +8,7 @@ class TestLights(unittest.TestCase):
     def setUp(self):
         self.light_box = LightBox(3)
         self.test_buffer = ['3', 'switch 0,1 through 2,2']
-        self.test_file = "light_box/input_assign3_b_v2.txt"
+        self.test_file = "tests/input_assign3_b_v2.txt"
 
     def test_read_file(self):
         read_uri(self.test_file)
@@ -16,23 +16,27 @@ class TestLights(unittest.TestCase):
 
     def test_light_change(self):
         new_light = [[True, True, True],[False, False, False],[False, False, False]]
-        self.light_box.light_change('0, 0', '0, 2', on)
+        self.light_box.light_change(('0', '0'), ('0', '2'), on)
         self.assertEquals(self.light_box.light, new_light)
 
     def test_get_coords(self):
-        self.assertEquals(self.light_box.get_coords('-4, 7'), (0, 2))
-        self.assertEquals(self.light_box.get_coords('1, 2'), (1, 2))
+        self.assertEquals(self.light_box.get_coords(('-4', '7')), (0, 2))
+        self.assertEquals(self.light_box.get_coords(('1', '2')), (1, 2))
 
 
     def test_parse_line_switch(self):
         start, end, fun = parse_line('switch 322,558 through 977,958')
-        self.assertEquals(start, '322,558' )
-        self.assertEquals(end, '977,958')
+        self.assertEquals(start, ('322','558'))
+        self.assertEquals(end, ('977','958'))
 
     def test_parse_line_onoff(self):
         start, end, fun = parse_line('turn off 87,577 through 484,-608')
-        self.assertEquals(start, '87,577')
-        self.assertEquals(end, '484,-608')
+        self.assertEquals(start, ('87','577'))
+        self.assertEquals(end, ('484','-608'))
+
+        start, end, fun = parse_line('turn off 87 ,-577 through 484 , -608')
+        self.assertEquals(start, ('87', '-577'))
+        self.assertEquals(end, ('484', '-608'))
 
     def test_on_off_switch(self):
         self.assertTrue(on(True))

@@ -1,9 +1,7 @@
 import urllib.request
+import re
 import matplotlib.pyplot as plt
 import argparse
-
-uri = 'input_assign3.txt'
-
 
 def read_uri(fname):
     """Opening file or url depending on the prefix of the input. The file is then split on new lines"""
@@ -12,7 +10,7 @@ def read_uri(fname):
         return open_file.read().decode('Utf-8').split('\n') # utf decoding only needed for reading from url
     else:
         open_file = open(fname)
-        return open_file.read().split('\n')
+        return open_file
 
 class LightBox():
     """Class which handles all lightbox functionality."""
@@ -28,7 +26,7 @@ class LightBox():
     def get_coords(self, str_tuple):
         """Checks if co-ordinates are out of range. Negative values are set to zero, values above the max
         are set to the max value"""
-        return tuple(min(max(0, int(i)), self.light_size - 1) for i in str_tuple.split(','))
+        return tuple(min(max(0, int(i)), self.light_size - 1) for i in str_tuple)
 
 
     def light_change(self, start, end, instruction):
@@ -50,18 +48,15 @@ class LightBox():
 
 def parse_line(line):
     """Parsing lines from file. Switch/on/off co-ordinates taken from specific line indices """
+    m = re.findall("(-*\d+).*?(-*\d+)", line)
     line = line.split()
-    if 'switch' in line:
-        start = (line[1])
-        end = (line[3])
+    start, end = m
+
+    if len(line[0]) == len('switch'):
         fun = switch
-    elif 'on' in line:
-        start = (line[2])
-        end = (line[4])
+    elif len(line[1]) == len('on'):
         fun = on
-    elif 'off' in line:
-        start = (line[2])
-        end = (line[4])
+    elif len(line[1]) == len('off'):
         fun = off
     else:
         return None
@@ -69,7 +64,7 @@ def parse_line(line):
 
 
 def on(light):
-    """Fucntion to handle turning lights on"""
+    """Function to handle turning lights on"""
     return True
 
 
@@ -102,8 +97,13 @@ def main():
 
     for line in buffer[1::]:
         if line:
-            start, end, fun = parse_line(line)
-            lightbox.light_change(start, end, fun)
+            result = parse_line(line)
+            if result:
+                start, end, fun = result
+                lightbox.light_change(start, end, fun)
+            else:
+                print(line)
+
 
     print(lightbox.count_lights())
 
