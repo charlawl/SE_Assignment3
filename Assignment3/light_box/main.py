@@ -19,9 +19,16 @@ def read_uri(fname):
 
 #add in .decode('utf-8')
 
-# class LightBox():
-#     """Class which handles all lightbox functionality."""
+class LightBox():
+    """Class which handles all lightbox functionality."""
+    def __init__(self, size):
+        self.light_size = size
+        self.light = self.make_lights()
 
+
+    def make_lights(self):
+        """Creates the LED array the size of which depends on the first line of the file."""
+        return [[False for _ in range(self.light_size)] for _ in range(self.light_size)]
 
 
 
