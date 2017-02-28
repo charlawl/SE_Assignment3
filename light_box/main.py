@@ -108,5 +108,3 @@ def test_lights(uri):
                 lightbox.light_change(start, end, fun)
 
     print(lightbox.count_lights())
-
-test_lights(uri)
