@@ -7,7 +7,8 @@ def read_uri(fname):
     """Opening file or url depending on the prefix of the input. The file is then split on new lines"""
     if fname.startswith('http'):
         r = requests.get(fname)
-        return r.iter_lines(decode_unicode=True) # utf decoding only needed for reading from url
+        # utf decoding only needed for reading from url
+        return r.iter_lines(decode_unicode=True)
     else:
         open_file = open(fname)
         return open_file
@@ -18,7 +19,6 @@ class LightBox():
         self.light_size = size
         self.light = self.make_lights()
 
-
     def make_lights(self):
         """Creates the LED array the size of which depends on the first line of the file."""
         return [[False for _ in range(self.light_size)] for _ in range(self.light_size)]
@@ -26,8 +26,7 @@ class LightBox():
     def get_coords(self, str_tuple):
         """Checks if co-ordinates are out of range. Negative values are set to zero, values above the max
         are set to the max value"""
-        return tuple(min(max(0, int(i)), self.light_size - 1) for i in str_tuple)
-
+        return tuple(min(max(0, i), self.light_size - 1) for i in str_tuple)
 
     def light_change(self, start, end, instruction):
         """Takes start, end and instruction parameters, and changes light accordingly. Loops through y and then x"""
@@ -45,18 +44,21 @@ class LightBox():
         return lights_on
 
 
-
 def parse_line(line):
     """Parsing lines from file. Switch/on/off co-ordinates taken from specific line indices """
+    # RegEx to find pairs of numbers
     m = re.findall("(-*\d+).*?(-*\d+)", line)
     line = line.split()
     start, end = m
+    start = int(start[0]), int(start[1])
+    end = int(end[0]), int(end[1])
 
-    if len(line[0]) == len('switch'):
+
+    if line[0] == 'switch':
         fun = switch
-    elif len(line[1]) == len('on'):
+    elif line[0] == 'turn' and line[1] == 'on':
         fun = on
-    elif len(line[1]) == len('off'):
+    elif line[0] == 'turn' and line[1] == 'off':
         fun = off
     else:
         return None
@@ -79,25 +81,24 @@ def switch(light):
 
 
 def main():
-    """Main function called"""
+    """Main function - entry point for command line script"""
 
     parser = argparse.ArgumentParser(prog='light_box')
-    parser.add_argument('-f', nargs='?', help='filename')
-    parser.add_argument('-u', nargs='?', help='URL')
+    parser.add_argument('--input', nargs='?', help='filename or URL')
 
     args = parser.parse_args()
 
-    uri = args.f or args.u
+    uri = args.input
     if not uri:
         print("No arguments provided. Please use -h for help.")
         return 1
 
-    test_lights(uri)
+    run_lights(uri)
 
 
-def test_lights(uri):
-
-    buffer = read_uri(uri)  # buffer will take arguments from arg parse in the command line
+def run_lights(uri):
+    # buffer will take arguments from arg parse in the command line
+    buffer = read_uri(uri)
     lightbox = LightBox(size=int(next(buffer)))
 
     for line in buffer:
@@ -107,4 +108,5 @@ def test_lights(uri):
                 start, end, fun = result
                 lightbox.light_change(start, end, fun)
 
-    print(lightbox.count_lights())
+
+    print("Number of lights on:", lightbox.count_lights())

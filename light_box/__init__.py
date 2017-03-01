@@ -1,1 +1,1 @@
-from .main import parse_line, on, off, switch, read_uri, LightBox, test_lights
+from .main import parse_line, on, off, switch, read_uri, LightBox, run_lights
