@@ -34,6 +34,10 @@ class TestLights(unittest.TestCase):
         self.assertEquals(start, (87, -577))
         self.assertEquals(end, (484, -608))
 
+        start, end, fun = parse_line('torn ofx 87 ,-577 through 484 , -608')
+        self.assertNotEqual(start, (87, -577))
+        self.assertNotEqual(end, (484, -608))
+
     def test_on_off_switch(self):
         self.assertTrue(on(True))
         self.assertTrue(on(False))
